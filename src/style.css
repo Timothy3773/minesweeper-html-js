@@ -1,11 +1,27 @@
+@font-face {
+    font-family: Roboto;
+    src: url(./Roboto/Roboto-Regular.ttf);
+}
+
+@font-face {
+    font-family: PressStart2P;
+    src: url(./Press_Start_2P/PressStart2P-Regular.ttf);
+}
+
+/* ---------------------------------------------------------------------- */
+
 html {
     height: 100%;
 }
 
 body {
-    max-height: fit-content;
+    height: 99%;
     padding: 1px; box-sizing: border-box;
     background: teal url("./bliss.jpg") center / cover no-repeat;
+}
+
+.vertCenter {
+    vertical-align: middle;
 }
 
 table {
@@ -31,6 +47,10 @@ button {
 
 button:active {
     border-style: outset;
+}
+
+h1, h2, h3, p {
+    font-family: Roboto, Arial, Helvetica, sans-serif;
 }
 
 
