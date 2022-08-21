@@ -3,8 +3,8 @@ let board = document.getElementById('board')
 
 var data = []
 let settings = {
-    rows: 8,
-    cellsPerRow: 8,
+    rows: 5,
+    cellsPerRow: 5,
     mineDensity: 5
 }
 
@@ -63,36 +63,35 @@ var validateAdjacentCells = (x, y) => {
     return adjacentCells
 }
 
-var updateCell = (cell,properties) => {
-    if (cell && cell.element){
-        /**
-         * @type {HTMLTableCellElement} 
-         */
-        var el = cell.element
-        el[properties.name] = properties.value
-        return cell
-    }
+var cellTypeAlgor = (cell) => {
+    let neighbours = validateAdjacentCells(cell)
+    return cell
 }
 
-var cellTypeAlgor = (x,y) => {
+var updateCell = (x,y,cellType) => {
     let cell = getCell(x,y)
-    let neighbours = validateAdjacentCells(cell)
-    return "bomb"
+    cell.cellType = cellType
+    cellTypeAlgor(cell)
+}
+
+var generateBoard = async () => {
+    for (let rows = 0; rows < settings.rows; rows++) {
+        createRow().then((v) => {
+            for (let cells = 0; cells < settings.cellsPerRow; cells++) {
+                let cell = createCell(v.el, `${cells + 1}`)
+                data.push({ element: cell, x: cells, y: rows, cellType: null })
+                updateCell(cells,rows, "bomb")
+                cell.onclick = (ev) => {
+                    console.log("Cell",getCell(cells, rows),"Adjacent Cells", validateAdjacentCells(cells,rows))
+                }
+            }
+        })
+    }
 }
 
 
 window.addEventListener("load", async (ev) => {
-    await (async () => {
-        for (let rows = 0; rows < settings.rows; rows++) {
-            createRow().then((v) => {
-                for (let cells = 0; cells < settings.cellsPerRow; cells++) {
-                    let cell = createCell(v.el, `${cells}`)
-                    data.push({ element: cell, x: cells, y: rows, cellType: cellTypeAlgor(cells, rows) })
-                }
-            })
-        }
-    })()
+    await generateBoard()
 
-    console.log(getCell(0, 0))
-    updateCell(getCell(0,0), {name: "innerText", value: "2"})
+   
 })

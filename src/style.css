@@ -56,5 +56,7 @@ h1, h2, h3, p {
 .cellBtn {
     font-size: 15px;
     font-family: PressStart2P;
+    text-align: center;
+    padding: 0;
 }
 
