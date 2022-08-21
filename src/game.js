@@ -32,7 +32,7 @@ var createCell = (row, int) => {
     cellBtn.innerText = int
     cell.append(cellBtn)
     row.append(cell)
-    return cell
+    return cellBtn
 }
 
 var getCell = (x, y) => {
@@ -40,12 +40,44 @@ var getCell = (x, y) => {
     if (cell !== undefined) {
         return cell
     } else {
-        throw Error("Cell not found")
+        return null
     }
 }
 
-var validateAdjacentCells = (x,y) => {
-    return getCell(x - 1, y - 1)
+var validateAdjacentCells = (x, y) => {
+    let adjacentCells = []
+    let calculations = [
+        {x: x, y: y - 1},
+        {x: x + 1, y: y - 1},
+        {x: x - 1, y: y - 1},
+        {x: x - 1, y: y},
+        {x: x + 1, y: y},
+        {x: x, y: y + 1},
+        {x: x + 1, y: y + 1},
+        {x: x - 1, y: y - 1}
+    ]
+    for (const calc of calculations){
+        let cell = getCell(calc.x, calc.y)
+        if (cell !== null) adjacentCells.push(cell)
+    }
+    return adjacentCells
+}
+
+var updateCell = (cell,properties) => {
+    if (cell && cell.element){
+        /**
+         * @type {HTMLTableCellElement} 
+         */
+        var el = cell.element
+        el[properties.name] = properties.value
+        return cell
+    }
+}
+
+var cellTypeAlgor = (x,y) => {
+    let cell = getCell(x,y)
+    let neighbours = validateAdjacentCells(cell)
+    return "bomb"
 }
 
 
@@ -55,12 +87,12 @@ window.addEventListener("load", async (ev) => {
             createRow().then((v) => {
                 for (let cells = 0; cells < settings.cellsPerRow; cells++) {
                     let cell = createCell(v.el, `${cells}`)
-                    data.push({ element: cell, x: cells, y: rows })
+                    data.push({ element: cell, x: cells, y: rows, cellType: cellTypeAlgor(cells, rows) })
                 }
             })
         }
     })()
 
-    console.log(getCell(1, 7))
-    console.log(validateAdjacentCells(2,2))
+    console.log(getCell(0, 0))
+    updateCell(getCell(0,0), {name: "innerText", value: "2"})
 })
